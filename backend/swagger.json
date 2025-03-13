@@ -1,0 +1,1880 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Haife API",
+    "version": "1.0.0",
+    "description": ""
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Public",
+      "description": "對外公開相關"
+    },
+    {
+      "name": "Draw",
+      "description": "對外抽獎相關"
+    },
+    {
+      "name": "Dashboard",
+      "description": "管理首頁統計資訊相關"
+    },
+    {
+      "name": "Activity",
+      "description": "活動相關"
+    },
+    {
+      "name": "Codes",
+      "description": "序號相關"
+    },
+    {
+      "name": "Prizes",
+      "description": "獎項相關"
+    },
+    {
+      "name": "Winners",
+      "description": "中獎相關"
+    },
+    {
+      "name": "User",
+      "description": "使用者相關"
+    },
+    {
+      "name": "Role",
+      "description": "角色相關"
+    },
+    {
+      "name": "Page",
+      "description": "頁面相關"
+    },
+    {
+      "name": "Role Page Action",
+      "description": "角色頁面權限相關"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/api/public/login": {
+      "post": {
+        "tags": [
+          "Public"
+        ],
+        "summary": "系統登入",
+        "description": "傳入帳號密碼並進行驗證登入",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "account": {
+                  "type": "string",
+                  "example": "帳號"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "密碼"
+                }
+              },
+              "required": [
+                "account",
+                "password"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "登入成功"
+          },
+          "400": {
+            "description": "登入失敗"
+          },
+          "403": {
+            "description": "無法通過帳密驗證"
+          }
+        }
+      }
+    },
+    "/api/role": {
+      "post": {
+        "tags": [
+          "Role"
+        ],
+        "summary": "新增角色",
+        "description": "傳入角色資訊並建立角色",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "description": "使用者權杖",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "角色新增資訊",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "角色名稱"
+                },
+                "isEnabled": {
+                  "type": "string",
+                  "example": "是否啟用"
+                }
+              },
+              "required": [
+                "name",
+                "isEnabled"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "新增成功"
+          },
+          "400": {
+            "description": "新增失敗"
+          },
+          "403": {
+            "description": "使用者沒有角色頁面權限"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Role"
+        ],
+        "summary": "角色查詢 (含分頁與搜尋)",
+        "description": "列出所有角色資訊 (含分頁與搜尋)",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "description": "使用者權杖",
+            "type": "string"
+          },
+          {
+            "name": "rowsPerPage",
+            "in": "query",
+            "required": false,
+            "description": "每頁筆數",
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "description": "目前頁數",
+            "type": "string"
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "required": false,
+            "description": "排序欄位",
+            "type": "string"
+          },
+          {
+            "name": "sortType",
+            "in": "query",
+            "required": false,
+            "description": "排序方式",
+            "type": "string"
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "description": "搜尋資訊 (可空值)",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "查詢成功"
+          },
+          "400": {
+            "description": "查詢失敗"
+          },
+          "403": {
+            "description": "使用者沒有角色頁面權限"
+          }
+        }
+      }
+    },
+    "/api/role/{uuid}": {
+      "patch": {
+        "tags": [
+          "Role"
+        ],
+        "summary": "修改角色",
+        "description": "根據角色編號，傳入角色資訊並修改角色",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "角色編號"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "description": "使用者權杖",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "角色修改資訊",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "角色名稱"
+                },
+                "isEnabled": {
+                  "type": "string",
+                  "example": "是否啟用"
+                }
+              },
+              "required": [
+                "name",
+                "isEnabled"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "修改成功"
+          },
+          "400": {
+            "description": "修改失敗"
+          },
+          "403": {
+            "description": "使用者沒有角色頁面權限"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Role"
+        ],
+        "summary": "刪除角色",
+        "description": "根據角色編號刪除角色",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "角色編號"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "description": "使用者權杖",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "刪除成功"
+          },
+          "400": {
+            "description": "刪除失敗"
+          },
+          "403": {
+            "description": "使用者沒有角色頁面權限"
+          }
+        }
+      }
+    },
+    "/api/user": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "新增使用者",
+        "description": "傳入使用者資訊並建立使用者",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "description": "使用者權杖",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "使用者新增資訊",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "role": {
+                  "type": "string",
+                  "example": "使用者角色"
+                },
+                "realName": {
+                  "type": "string",
+                  "example": "真實姓名"
+                },
+                "nickName": {
+                  "type": "string",
+                  "example": "暱稱"
+                },
+                "account": {
+                  "type": "string",
+                  "example": "帳號"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "密碼"
+                },
+                "isEnabled": {
+                  "type": "string",
+                  "example": "是否啟用"
+                }
+              },
+              "required": [
+                "role",
+                "realName",
+                "nickName",
+                "account",
+                "password",
+                "isEnabled"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "新增成功"
+          },
+          "400": {
+            "description": "新增失敗"
+          },
+          "403": {
+            "description": "使用者沒有角色頁面權限"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "使用者查詢 (含分頁與搜尋)",
+        "description": "列出所有使用者資訊 (含分頁與搜尋)",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "description": "使用者權杖",
+            "type": "string"
+          },
+          {
+            "name": "rowsPerPage",
+            "in": "query",
+            "required": false,
+            "description": "每頁筆數",
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "description": "目前頁數",
+            "type": "string"
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "required": false,
+            "description": "排序欄位",
+            "type": "string"
+          },
+          {
+            "name": "sortType",
+            "in": "query",
+            "required": false,
+            "description": "排序方式",
+            "type": "string"
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "description": "搜尋資訊 (可空值)",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "查詢成功"
+          },
+          "400": {
+            "description": "查詢失敗"
+          },
+          "403": {
+            "description": "使用者沒有角色頁面權限"
+          }
+        }
+      }
+    },
+    "/api/user/{uuid}": {
+      "patch": {
+        "tags": [
+          "User"
+        ],
+        "summary": "修改使用者",
+        "description": "根據使用者編號，傳入使用者資訊並修改使用者",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "使用者編號"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "description": "使用者權杖",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "使用者修改資訊",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "role": {
+                  "type": "string",
+                  "example": "使用者角色"
+                },
+                "realName": {
+                  "type": "string",
+                  "example": "真實姓名"
+                },
+                "nickName": {
+                  "type": "string",
+                  "example": "暱稱"
+                },
+                "account": {
+                  "type": "string",
+                  "example": "帳號"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "密碼"
+                },
+                "isEnabled": {
+                  "type": "string",
+                  "example": "是否啟用"
+                }
+              },
+              "required": [
+                "role",
+                "realName",
+                "nickName",
+                "account",
+                "password",
+                "isEnabled"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "修改成功"
+          },
+          "400": {
+            "description": "修改失敗"
+          },
+          "403": {
+            "description": "使用者沒有角色頁面權限"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "User"
+        ],
+        "summary": "刪除使用者",
+        "description": "根據使用者編號刪除使用者",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "使用者編號"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "description": "使用者權杖",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "刪除成功"
+          },
+          "400": {
+            "description": "刪除失敗"
+          },
+          "403": {
+            "description": "使用者沒有角色頁面權限"
+          }
+        }
+      }
+    },
+    "/api/page": {
+      "post": {
+        "tags": [
+          "Page"
+        ],
+        "summary": "新增頁面",
+        "description": "傳入頁面資訊並建立頁面",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "description": "使用者權杖",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "頁面新增資訊",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "頁面名稱"
+                },
+                "displayName": {
+                  "type": "string",
+                  "example": "頁面顯示名稱"
+                },
+                "path": {
+                  "type": "string",
+                  "example": "路徑"
+                },
+                "parentId": {
+                  "type": "string",
+                  "example": "父頁面編號"
+                },
+                "sort": {
+                  "type": "string",
+                  "example": "排序"
+                },
+                "icon": {
+                  "type": "string",
+                  "example": "圖標"
+                }
+              },
+              "required": [
+                "name",
+                "displayName",
+                "path",
+                "parentId",
+                "sort",
+                "icon"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "新增成功"
+          },
+          "400": {
+            "description": "新增失敗"
+          },
+          "403": {
+            "description": "使用者沒有角色頁面權限"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Page"
+        ],
+        "summary": "頁面查詢 (含分頁與搜尋)",
+        "description": "列出所有頁面資訊 (含分頁與搜尋)",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "description": "使用者權杖",
+            "type": "string"
+          },
+          {
+            "name": "rowsPerPage",
+            "in": "query",
+            "required": false,
+            "description": "每頁筆數",
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "description": "目前頁數",
+            "type": "string"
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "required": false,
+            "description": "排序欄位",
+            "type": "string"
+          },
+          {
+            "name": "sortType",
+            "in": "query",
+            "required": false,
+            "description": "排序方式",
+            "type": "string"
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "description": "搜尋資訊 (可空值)",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "查詢成功"
+          },
+          "400": {
+            "description": "查詢失敗"
+          },
+          "403": {
+            "description": "使用者沒有角色頁面權限"
+          }
+        }
+      }
+    },
+    "/api/page/{uuid}": {
+      "patch": {
+        "tags": [
+          "Page"
+        ],
+        "summary": "修改頁面",
+        "description": "根據頁面編號，傳入頁面資訊並修改頁面",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "頁面編號"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "description": "使用者權杖",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "頁面修改資訊",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "頁面名稱"
+                },
+                "displayName": {
+                  "type": "string",
+                  "example": "頁面顯示名稱"
+                },
+                "path": {
+                  "type": "string",
+                  "example": "路徑"
+                },
+                "parentId": {
+                  "type": "string",
+                  "example": "父頁面編號"
+                },
+                "sort": {
+                  "type": "string",
+                  "example": "排序"
+                },
+                "icon": {
+                  "type": "string",
+                  "example": "圖標"
+                }
+              },
+              "required": [
+                "name",
+                "displayName",
+                "path",
+                "parentId",
+                "sort",
+                "icon"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "修改成功"
+          },
+          "400": {
+            "description": "修改失敗"
+          },
+          "403": {
+            "description": "使用者沒有角色頁面權限"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Page"
+        ],
+        "summary": "刪除頁面",
+        "description": "根據頁面編號刪除頁面",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "頁面編號"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "description": "使用者權杖",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "刪除成功"
+          },
+          "400": {
+            "description": "刪除失敗"
+          },
+          "403": {
+            "description": "使用者沒有角色頁面權限"
+          }
+        }
+      }
+    },
+    "/api/page/parent": {
+      "get": {
+        "tags": [
+          "Page"
+        ],
+        "summary": "查詢所有父頁面",
+        "description": "列出所有父頁面資訊",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "description": "使用者權杖",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "查詢成功"
+          },
+          "400": {
+            "description": "查詢失敗"
+          },
+          "403": {
+            "description": "使用者沒有角色頁面權限"
+          }
+        }
+      }
+    },
+    "/api/rolePageAction/{role_uuid}": {
+      "get": {
+        "tags": [
+          "Role Page Action"
+        ],
+        "summary": "取得角色頁面權限",
+        "description": "根據角色編號進行頁面權限查詢",
+        "parameters": [
+          {
+            "name": "role_uuid",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "角色編號"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "description": "使用者權杖",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "查詢成功"
+          },
+          "400": {
+            "description": "查詢失敗"
+          },
+          "403": {
+            "description": "使用者沒有角色頁面權限"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Role Page Action"
+        ],
+        "summary": "修改角色頁面權限",
+        "description": "根據角色編號進行頁面權限修改",
+        "parameters": [
+          {
+            "name": "role_uuid",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "角色編號"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "description": "使用者權杖",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "頁面權限修改資訊",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "page_uuid": {
+                  "type": "string",
+                  "example": "頁面編號"
+                },
+                "action_uuid": {
+                  "type": "string",
+                  "example": "操作編號"
+                },
+                "isCheck": {
+                  "type": "string",
+                  "example": "狀態"
+                }
+              },
+              "required": [
+                "page_uuid",
+                "action_uuid",
+                "isCheck"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "修改成功"
+          },
+          "400": {
+            "description": "修改失敗"
+          },
+          "403": {
+            "description": "使用者沒有角色頁面權限"
+          }
+        }
+      }
+    },
+    "/api/activity": {
+      "post": {
+        "tags": [
+          "Activity"
+        ],
+        "summary": "新增活動",
+        "description": "傳入活動資訊並建立活動",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "description": "使用者權杖",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "活動新增資訊",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "活動名稱"
+                },
+                "startTime": {
+                  "type": "string",
+                  "example": "活動開始時間"
+                },
+                "endTime": {
+                  "type": "string",
+                  "example": "活動結束時間"
+                }
+              },
+              "required": [
+                "name",
+                "startTime",
+                "endTime"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "新增成功"
+          },
+          "400": {
+            "description": "新增失敗"
+          },
+          "403": {
+            "description": "使用者沒有角色頁面權限"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Activity"
+        ],
+        "summary": "活動查詢 (含分頁與搜尋)",
+        "description": "列出所有活動資訊 (含分頁與搜尋)",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "description": "使用者權杖",
+            "type": "string"
+          },
+          {
+            "name": "rowsPerPage",
+            "in": "query",
+            "required": false,
+            "description": "每頁筆數",
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "description": "目前頁數",
+            "type": "string"
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "required": false,
+            "description": "排序欄位",
+            "type": "string"
+          },
+          {
+            "name": "sortType",
+            "in": "query",
+            "required": false,
+            "description": "排序方式",
+            "type": "string"
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "description": "搜尋資訊 (可空值)",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "查詢成功"
+          },
+          "400": {
+            "description": "查詢失敗"
+          },
+          "403": {
+            "description": "使用者沒有角色頁面權限"
+          }
+        }
+      }
+    },
+    "/api/activity/{uuid}": {
+      "patch": {
+        "tags": [
+          "Activity"
+        ],
+        "summary": "修改活動",
+        "description": "根據活動編號，傳入活動資訊並修改活動",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "活動編號"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "description": "使用者權杖",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "活動修改資訊",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "活動名稱"
+                },
+                "startTime": {
+                  "type": "string",
+                  "example": "活動開始時間"
+                },
+                "endTime": {
+                  "type": "string",
+                  "example": "活動結束時間"
+                }
+              },
+              "required": [
+                "name",
+                "startTime",
+                "endTime"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "修改成功"
+          },
+          "400": {
+            "description": "修改失敗"
+          },
+          "403": {
+            "description": "使用者沒有角色頁面權限"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Activity"
+        ],
+        "summary": "刪除活動",
+        "description": "根據活動編號刪除活動",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "活動編號"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "description": "使用者權杖",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "刪除成功"
+          },
+          "400": {
+            "description": "刪除失敗"
+          },
+          "403": {
+            "description": "使用者沒有角色頁面權限"
+          }
+        }
+      }
+    },
+    "/api/codes": {
+      "post": {
+        "tags": [
+          "Codes"
+        ],
+        "summary": "新增序號",
+        "description": "建立序號",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "description": "使用者權杖",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "序號新增資訊",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "activity_uuid": {
+                  "type": "string",
+                  "example": "活動編號"
+                }
+              },
+              "required": [
+                "activity_uuid"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "新增成功"
+          },
+          "400": {
+            "description": "新增失敗"
+          },
+          "403": {
+            "description": "使用者沒有角色頁面權限"
+          }
+        }
+      }
+    },
+    "/api/codes/{uuid}": {
+      "delete": {
+        "tags": [
+          "Codes"
+        ],
+        "summary": "刪除序號",
+        "description": "根據序號編號刪除序號",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "序號編號"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "description": "使用者權杖",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "刪除成功"
+          },
+          "400": {
+            "description": "刪除失敗"
+          },
+          "403": {
+            "description": "使用者沒有角色頁面權限"
+          }
+        }
+      }
+    },
+    "/api/codes/{activity_uuid}": {
+      "get": {
+        "tags": [
+          "Codes"
+        ],
+        "summary": "序號查詢 (含分頁與搜尋)",
+        "description": "根據活動編號列出所有序號資訊 (含分頁與搜尋)",
+        "parameters": [
+          {
+            "name": "activity_uuid",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "活動編號"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "description": "使用者權杖",
+            "type": "string"
+          },
+          {
+            "name": "rowsPerPage",
+            "in": "query",
+            "required": false,
+            "description": "每頁筆數",
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "description": "目前頁數",
+            "type": "string"
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "required": false,
+            "description": "排序欄位",
+            "type": "string"
+          },
+          {
+            "name": "sortType",
+            "in": "query",
+            "required": false,
+            "description": "排序方式",
+            "type": "string"
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "description": "搜尋資訊 (可空值)",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "查詢成功"
+          },
+          "400": {
+            "description": "查詢失敗"
+          },
+          "403": {
+            "description": "使用者沒有角色頁面權限"
+          }
+        }
+      }
+    },
+    "/api/prizes": {
+      "post": {
+        "tags": [
+          "Prizes"
+        ],
+        "summary": "新增獎項",
+        "description": "傳入獎項資訊並建立獎項",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "description": "使用者權杖",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "獎項新增資訊",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "獎項名稱"
+                },
+                "price": {
+                  "type": "string",
+                  "example": "價格"
+                },
+                "time": {
+                  "type": "string",
+                  "example": "個數"
+                },
+                "quantity": {
+                  "type": "string",
+                  "example": "獎項數量"
+                },
+                "remainingQty": {
+                  "type": "string",
+                  "example": "剩餘數量"
+                },
+                "type": {
+                  "type": "string",
+                  "example": "獎項類型"
+                },
+                "isEnabled": {
+                  "type": "string",
+                  "example": "是否啟用"
+                },
+                "activity_uuid": {
+                  "type": "string",
+                  "example": "活動編號"
+                }
+              },
+              "required": [
+                "name",
+                "price",
+                "time",
+                "quantity",
+                "remainingQty",
+                "type",
+                "isEnabled",
+                "activity_uuid"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "新增成功"
+          },
+          "400": {
+            "description": "新增失敗"
+          },
+          "403": {
+            "description": "使用者沒有角色頁面權限"
+          }
+        }
+      }
+    },
+    "/api/prizes/{uuid}": {
+      "patch": {
+        "tags": [
+          "Prizes"
+        ],
+        "summary": "修改獎項",
+        "description": "根據獎項編號，傳入獎項資訊並修改獎項",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "獎項編號"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "description": "使用者權杖",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "獎項修改資訊",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "獎項名稱"
+                },
+                "price": {
+                  "type": "string",
+                  "example": "價格"
+                },
+                "time": {
+                  "type": "string",
+                  "example": "個數"
+                },
+                "quantity": {
+                  "type": "string",
+                  "example": "獎項數量"
+                },
+                "remainingQty": {
+                  "type": "string",
+                  "example": "剩餘數量"
+                },
+                "type": {
+                  "type": "string",
+                  "example": "獎項類型"
+                },
+                "isEnabled": {
+                  "type": "string",
+                  "example": "是否啟用"
+                }
+              },
+              "required": [
+                "name",
+                "price",
+                "time",
+                "quantity",
+                "remainingQty",
+                "type",
+                "isEnabled"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "修改成功"
+          },
+          "400": {
+            "description": "修改失敗"
+          },
+          "403": {
+            "description": "使用者沒有角色頁面權限"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Prizes"
+        ],
+        "summary": "刪除獎項",
+        "description": "根據獎項編號刪除獎項",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "獎項編號"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "description": "使用者權杖",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "刪除成功"
+          },
+          "400": {
+            "description": "刪除失敗"
+          },
+          "403": {
+            "description": "使用者沒有角色頁面權限"
+          }
+        }
+      }
+    },
+    "/api/prizes/{activity_uuid}": {
+      "get": {
+        "tags": [
+          "Prizes"
+        ],
+        "summary": "獎項查詢 (含分頁與搜尋)",
+        "description": "根據活動編號列出所有獎項資訊 (含分頁與搜尋)",
+        "parameters": [
+          {
+            "name": "activity_uuid",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "活動編號"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "description": "使用者權杖",
+            "type": "string"
+          },
+          {
+            "name": "rowsPerPage",
+            "in": "query",
+            "required": false,
+            "description": "每頁筆數",
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "description": "目前頁數",
+            "type": "string"
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "required": false,
+            "description": "排序欄位",
+            "type": "string"
+          },
+          {
+            "name": "sortType",
+            "in": "query",
+            "required": false,
+            "description": "排序方式",
+            "type": "string"
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "description": "搜尋資訊 (可空值)",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "查詢成功"
+          },
+          "400": {
+            "description": "查詢失敗"
+          },
+          "403": {
+            "description": "使用者沒有角色頁面權限"
+          }
+        }
+      }
+    },
+    "/api/winners/{uuid}": {
+      "patch": {
+        "tags": [
+          "Winners"
+        ],
+        "summary": "修改中獎人",
+        "description": "根據中獎人編號，傳入中獎資訊並修改中獎人",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "中獎人編號"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "description": "使用者權杖",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "中獎人修改資訊",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "isExchange": {
+                  "type": "string",
+                  "example": "是否兌換"
+                },
+                "remark": {
+                  "type": "string",
+                  "example": "備註"
+                }
+              },
+              "required": [
+                "isExchange",
+                "remark"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "修改成功"
+          },
+          "400": {
+            "description": "修改失敗"
+          },
+          "403": {
+            "description": "使用者沒有角色頁面權限"
+          }
+        }
+      }
+    },
+    "/api/winners/{activity_uuid}": {
+      "get": {
+        "tags": [
+          "Winners"
+        ],
+        "summary": "中獎人查詢 (含分頁與搜尋)",
+        "description": "根據活動編號列出所有中獎人資訊 (含分頁與搜尋)",
+        "parameters": [
+          {
+            "name": "activity_uuid",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "活動編號"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "description": "使用者權杖",
+            "type": "string"
+          },
+          {
+            "name": "rowsPerPage",
+            "in": "query",
+            "required": false,
+            "description": "每頁筆數",
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "description": "目前頁數",
+            "type": "string"
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "required": false,
+            "description": "排序欄位",
+            "type": "string"
+          },
+          {
+            "name": "sortType",
+            "in": "query",
+            "required": false,
+            "description": "排序方式",
+            "type": "string"
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "description": "搜尋資訊 (可空值)",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "查詢成功"
+          },
+          "400": {
+            "description": "查詢失敗"
+          },
+          "403": {
+            "description": "使用者沒有角色頁面權限"
+          }
+        }
+      }
+    },
+    "/api/dashboard": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "summary": "數據查詢",
+        "description": "列出所有數據資訊",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": true,
+            "description": "使用者權杖",
+            "type": "string"
+          },
+          {
+            "name": "activity_uuid",
+            "in": "query",
+            "required": true,
+            "description": "活動編號",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "查詢成功"
+          },
+          "400": {
+            "description": "查詢失敗"
+          },
+          "403": {
+            "description": "使用者沒有角色頁面權限"
+          }
+        }
+      }
+    },
+    "/api/draw": {
+      "post": {
+        "tags": [
+          "Draw"
+        ],
+        "summary": "抽獎",
+        "description": "進行抽獎",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "required": true,
+            "description": "抽獎序號",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "description": "抽獎者資訊",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userName": {
+                  "type": "string",
+                  "example": "抽獎者姓名"
+                },
+                "phone": {
+                  "type": "string",
+                  "example": "聯絡電話"
+                },
+                "designer": {
+                  "type": "string",
+                  "example": "設計師"
+                }
+              },
+              "required": [
+                "userName",
+                "phone",
+                "designer"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "抽獎成功"
+          },
+          "400": {
+            "description": "抽獎失敗"
+          }
+        }
+      }
+    },
+    "/api/draw/verify": {
+      "post": {
+        "tags": [
+          "Draw"
+        ],
+        "summary": "查核抽獎序號",
+        "description": "查核抽獎序號",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "example": "any"
+                }
+              }
+            },
+            "required": true,
+            "description": "抽獎序號"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "查詢成功"
+          },
+          "400": {
+            "description": "查詢失敗"
+          }
+        }
+      }
+    },
+    "/api/draw/prizes": {
+      "get": {
+        "tags": [
+          "Draw"
+        ],
+        "summary": "取得所有獎項",
+        "description": "列出所有獎項",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "required": true,
+            "description": "抽獎序號",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "查詢成功"
+          },
+          "400": {
+            "description": "查詢失敗"
+          }
+        }
+      }
+    },
+    "/api/draw/winner": {
+      "get": {
+        "tags": [
+          "Draw"
+        ],
+        "summary": "取得中獎獎項",
+        "description": "取得中獎獎項",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "required": true,
+            "description": "抽獎序號",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "查詢成功"
+          },
+          "400": {
+            "description": "查詢失敗"
+          }
+        }
+      }
+    }
+  }
+}

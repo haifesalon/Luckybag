@@ -1,0 +1,29 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "export SET NODE_OPTIONS=--openssl-legacy-provider && node --watch app.js",
+    "swagger-autogen": "node ./helper/swagger.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Samuel Chi",
+  "license": "ISC",
+  "dependencies": {
+    "crypto": "^1.0.1",
+    "eslint": "^9.17.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "jsonwebtoken": "^9.0.2",
+    "moment": "^2.30.1",
+    "prettier": "^3.4.2",
+    "sequelize": "^6.37.5",
+    "sequelize-auto": "^0.8.8",
+    "swagger-autogen": "^2.23.7",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "tedious": "^18.6.1"
+  }
+}
