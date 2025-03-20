@@ -137,7 +137,7 @@ router.post("/", async (req, res) => {
               config.webConfig.DEFAULT_USER_UUID
             );
             // #swagger.responses[200] = { description: '抽獎成功' }
-            return res.status(200).json({ success: true, data: prize_data });
+            return res.status(200).json({ success: true, data: { uuid: prize_data.uuid, name: prize_data.name } });
           }
         }
       }
