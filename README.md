@@ -21,7 +21,7 @@
 
 ## Database Schema
 
-![image](screenshot/db_schema.png)
+![image](screenshot/db_schema.PNG)
 
 ## Copyright
 
