@@ -2,6 +2,12 @@
 
 ## Info
 
+![image](screenshot/poster_1.jpg)
+![image](screenshot/poster_2.jpg)
+![image](screenshot/poster_3.jpg)
+
+## Infrastructure
+
 ```
 - Engine: Azure VM
 - OS: Ubuntu 22.04
@@ -13,16 +19,9 @@
 - Backend: Node.js + Express
 ```
 
-## Screenshot
+## Database Schema
 
-- 基本資料填寫頁面
-  ![image](screenshot/homepage.png)
-
-- 抽獎畫面
-  ![image](screenshot/drawpage.png)
-
-- 抽獎完成畫面
-  ![image](screenshot/afterdraw.png)
+![image](screenshot/db_schema.png)
 
 ## Copyright
 
